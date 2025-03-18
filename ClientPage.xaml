@@ -1,0 +1,76 @@
+﻿<Page x:Class="AlekseevLanguage.ClientPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AlekseevLanguage"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ClientPage">
+
+    <Grid>
+        <ListView Name="ClientListView">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Image Width="128" Grid.Column="0" Stretch="UniformToFill" HorizontalAlignment="Center" Grid.RowSpan="5">
+                            <Image.Source>
+                                <Binding Path="PhotoPath">
+                                    <Binding.TargetNullValue>
+                                        res/school_logo.png
+                                    </Binding.TargetNullValue>
+                                </Binding>
+                            </Image.Source>
+                        </Image>
+                        
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
+                            <TextBlock Text="{Binding ID, StringFormat=ID: {0}}"></TextBlock>
+                            <TextBlock Text="   "></TextBlock>
+                            <TextBlock Text="{Binding LastName}"></TextBlock>
+                            <TextBlock Text=" "></TextBlock>
+                            <TextBlock Text="{Binding FirstName}"></TextBlock>
+                            <TextBlock Text=" "></TextBlock>
+                            <TextBlock Text="{Binding Patronymic}"></TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
+                            <TextBlock Text="{Binding GenderName, StringFormat=Пол: {0}}"></TextBlock>
+                            <TextBlock Text="  Дата рождения: "></TextBlock>
+                            <TextBlock Text="{Binding NewBirthday}"></TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2">
+                            <TextBlock Text="{Binding Phone, StringFormat=Телефон: {0}}"></TextBlock>
+                            <TextBlock Text="  Email: "></TextBlock>
+                            <TextBlock Text="{Binding Email}"></TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
+                            <TextBlock Text="{Binding RegistrationDateString, StringFormat=Дата регистрации: {0}}"></TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4">
+                            <TextBlock Text="Дата последнего посещения: "></TextBlock>
+                            <TextBlock Text="{Binding LastDate}"></TextBlock>
+                            <TextBlock Text="  Количество посещений: "></TextBlock>
+                            <TextBlock Text="{Binding VisitCount}"></TextBlock>
+                        </StackPanel>
+
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>
