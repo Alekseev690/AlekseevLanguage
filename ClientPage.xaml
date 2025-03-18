@@ -47,14 +47,14 @@
 
                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
                             <TextBlock Text="{Binding GenderName, StringFormat=Пол: {0}}"></TextBlock>
-                            <TextBlock Text="  Дата рождения: "></TextBlock>
-                            <TextBlock Text="{Binding NewBirthday}"></TextBlock>
+                            <TextBlock Text="   "></TextBlock>
+                            <TextBlock Text="{Binding NewBirthday, StringFormat=Дата рождения: {0}}"></TextBlock>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2">
                             <TextBlock Text="{Binding Phone, StringFormat=Телефон: {0}}"></TextBlock>
-                            <TextBlock Text="  Email: "></TextBlock>
-                            <TextBlock Text="{Binding Email}"></TextBlock>
+                            <TextBlock Text="   "></TextBlock>
+                            <TextBlock Text="{Binding Email, StringFormat=Email: {0}}"></TextBlock>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
@@ -62,10 +62,9 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4">
-                            <TextBlock Text="Дата последнего посещения: "></TextBlock>
-                            <TextBlock Text="{Binding LastDate}"></TextBlock>
-                            <TextBlock Text="  Количество посещений: "></TextBlock>
-                            <TextBlock Text="{Binding VisitCount}"></TextBlock>
+                            <TextBlock Text="{Binding LastDate, StringFormat=Дата последнего посещения: {0}}"></TextBlock>
+                            <TextBlock Text="   "></TextBlock>
+                            <TextBlock Text="{Binding VisitCount, StringFormat=Количество посещений: {0}}"></TextBlock>
                         </StackPanel>
 
                     </Grid>
