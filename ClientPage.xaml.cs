@@ -143,7 +143,7 @@ namespace AlekseevLanguage
                     case 2:
                         if (CurrentPage < CountPage - 1) {
                             CurrentPage++;
-                            min = CurrentPage * 10 + 10 < CountRecords ? CountPage * 10 + 10 : CountRecords;
+                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
                             for (int i = CurrentPage * 10; i < min; i++) {
                                 CurrentPageList.Add(TableList[i]);
                             }
