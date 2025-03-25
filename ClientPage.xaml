@@ -9,11 +9,66 @@
       Title="ClientPage">
 
     <Grid>
-        <ListView Name="ClientListView">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <WrapPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Поиск:" FontSize="16"></TextBlock>
+                <TextBox Name="TBoxSearch" TextChanged="TBoxSearch_TextChanged" Width="250" FontSize="15" Height="20"></TextBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="   Пол:" FontSize="16"></TextBlock>
+                <ComboBox Name="GenderCB" SelectionChanged="GenderCB_SelectionChanged" FontSize="16" Width="100">
+                    <TextBlock>Все</TextBlock>
+                    <TextBlock>Мусжкой</TextBlock>
+                    <TextBlock>Женский</TextBlock>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="   Соритровка:" FontSize="16"></TextBlock>
+                <ComboBox Name="SortCB" SelectionChanged="SortCB_SelectionChanged" FontSize="16" Width="200">
+                    <TextBlock>Нет</TextBlock>
+                    <TextBlock>По фамилии от А до Я</TextBlock>
+                    <TextBlock>По дате последнего посещения</TextBlock>
+                    <TextBlock>По количеству посещений</TextBlock>
+                </ComboBox>
+            </StackPanel>
+        </WrapPanel>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Name="TBCount" FontSize="16"></TextBlock>
+            <TextBlock Name="TBAllRecords" FontSize="16"></TextBlock>
+            <TextBlock Text="     Выводить по " FontSize="16"></TextBlock>
+            <ComboBox Name="OutputCB" SelectionChanged="OutputCB_SelectionChanged" Width="100">
+                <TextBlock>10</TextBlock>
+                <TextBlock>50</TextBlock>
+                <TextBlock>200</TextBlock>
+                <TextBlock>Все</TextBlock>
+            </ComboBox>
+            <Button Name="LeftDirButton" Content="&lt;" Width="20" Height="20" Click="LeftDirButton_Click"></Button>
+            <ListBox FontSize="20" Name="PageListBox" MouseUp="PageListBox_MouseUp">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            <Button Name="RigthDirButton" Content="&gt;" Width="20" Height="20" Click="RigthDirButton_Click"></Button>
+        </StackPanel>
+
+        <ListView Name="ClientListView" Grid.Row="2">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
@@ -65,6 +120,10 @@
                             <TextBlock Text="{Binding LastDate, StringFormat=Дата последнего посещения: {0}}"></TextBlock>
                             <TextBlock Text="   "></TextBlock>
                             <TextBlock Text="{Binding VisitCount, StringFormat=Количество посещений: {0}}"></TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Button Name="DeleteButton" Content="удалить" Click="DeleteButton_Click"></Button>
                         </StackPanel>
 
                     </Grid>
