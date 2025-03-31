@@ -100,5 +100,12 @@ namespace AlekseevLanguage
                 return lastService != null ? lastService.StartTime.ToShortDateString() : "нет";
             }
         }
+        public DateTime StartDateTime
+        {
+            get
+            {
+                return ClientService.Where(p => p.ClientID == ID).Select(p => p.StartTime).FirstOrDefault();
+            }
+        }
     }
 }

@@ -110,53 +110,43 @@ namespace AlekseevLanguage
             if (OutputCB.SelectedIndex == 0)
             {
                 currentRecordsOnPage = 10;
-                if (CountRecords % currentRecordsOnPage > 0)
-                {
-                    CountPage = CountRecords / currentRecordsOnPage + 1;
-                }
-                else
-                {
-                    CountPage = CountRecords / currentRecordsOnPage;
-                }
             }
-            if (OutputCB.SelectedIndex == 1)
+            else if (OutputCB.SelectedIndex == 1)
             {
                 currentRecordsOnPage = 50;
-                if (CountRecords % currentRecordsOnPage > 0)
-                {
-                    CountPage = CountRecords / currentRecordsOnPage + 1;
-                }
-                else
-                {
-                    CountPage = CountRecords / currentRecordsOnPage;
-                }
             }
-            if (OutputCB.SelectedIndex == 2)
+            else if (OutputCB.SelectedIndex == 2)
             {
                 currentRecordsOnPage = 200;
-                if (CountRecords % currentRecordsOnPage > 0)
-                {
-                    CountPage = CountRecords / currentRecordsOnPage + 1;
-                }
-                else
-                {
-                    CountPage = CountRecords / currentRecordsOnPage;
-                }
             }
-            if (OutputCB.SelectedIndex == 3)
+            else if (OutputCB.SelectedIndex == 3)
             {
                 currentRecordsOnPage = АлексеевLanguageEntities.GetContext().Client.Select(p => p.ID).Count();
                 CountPage = 1;
             }
 
+            if (CountRecords % currentRecordsOnPage > 0)
+            {
+                CountPage = CountRecords / currentRecordsOnPage + 1;
+            }
+            else
+            {
+                CountPage = CountRecords / currentRecordsOnPage;
+            }
+
             Boolean Ifupdate = true;
             int min;
 
-            if (selectedPage.HasValue) {
-                if (selectedPage >= 0 && selectedPage <= CountPage) {
+            if (selectedPage.HasValue)
+            {
+                if (selectedPage >= 0 && selectedPage <= CountPage)
+                {
                     CurrentPage = (int)selectedPage;
-                    min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                    for (int i = CurrentPage * 10; i < min; i++) {
+                    min = CurrentPage * currentRecordsOnPage + currentRecordsOnPage < CountRecords
+                        ? CurrentPage * currentRecordsOnPage + currentRecordsOnPage
+                        : CountRecords;
+                    for (int i = CurrentPage * currentRecordsOnPage; i < min; i++)
+                    {
                         CurrentPageList.Add(TableList[i]);
                     }
                 }
@@ -166,30 +156,43 @@ namespace AlekseevLanguage
                 switch (direction)
                 {
                     case 1:
-                        if (CurrentPage > 0) {
+                        if (CurrentPage > 0)
+                        {
                             CurrentPage--;
-                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                            for (int i = CurrentPage * 10; i < min; i++) {
+                            min = CurrentPage * currentRecordsOnPage + currentRecordsOnPage < CountRecords
+                                ? CurrentPage * currentRecordsOnPage + currentRecordsOnPage
+                                : CountRecords;
+                            for (int i = CurrentPage * currentRecordsOnPage; i < min; i++)
+                            {
                                 CurrentPageList.Add(TableList[i]);
                             }
                         }
-                        else {
+                        else
+                        {
                             Ifupdate = false;
-                        } break;
+                        }
+                        break;
 
                     case 2:
-                        if (CurrentPage < CountPage - 1) {
+                        if (CurrentPage < CountPage - 1)
+                        {
                             CurrentPage++;
-                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                            for (int i = CurrentPage * 10; i < min; i++) {
+                            min = CurrentPage * currentRecordsOnPage + currentRecordsOnPage < CountRecords
+                                ? CurrentPage * currentRecordsOnPage + currentRecordsOnPage
+                                : CountRecords;
+                            for (int i = CurrentPage * currentRecordsOnPage; i < min; i++)
+                            {
                                 CurrentPageList.Add(TableList[i]);
                             }
                         }
-                        else {
+                        else
+                        {
                             Ifupdate = false;
-                        } break;
+                        }
+                        break;
                 }
             }
+
             if (Ifupdate)
             {
                 PageListBox.Items.Clear();
@@ -199,7 +202,9 @@ namespace AlekseevLanguage
                 }
                 PageListBox.SelectedIndex = CurrentPage;
 
-                min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                min = CurrentPage * currentRecordsOnPage + currentRecordsOnPage < CountRecords
+                    ? CurrentPage * currentRecordsOnPage + currentRecordsOnPage
+                    : CountRecords;
                 TBCount.Text = min.ToString();
                 TBAllRecords.Text = " из " + CountRecords.ToString();
 
