@@ -34,6 +34,7 @@ namespace AlekseevLanguage
 
             GenderCB.SelectedIndex = 0;
             SortCB.SelectedIndex = 0;
+            OutputCB.SelectedIndex = 0;
 
             UpdateClient();
         }
@@ -104,12 +105,48 @@ namespace AlekseevLanguage
         {
             CurrentPageList.Clear();
             CountRecords = TableList.Count;
+            int currentRecordsOnPage = 10;
 
-            if (CountRecords % 10 > 0) {
-                CountPage = CountRecords / 10 + 1;
+            if (OutputCB.SelectedIndex == 0)
+            {
+                currentRecordsOnPage = 10;
+                if (CountRecords % currentRecordsOnPage > 0)
+                {
+                    CountPage = CountRecords / currentRecordsOnPage + 1;
+                }
+                else
+                {
+                    CountPage = CountRecords / currentRecordsOnPage;
+                }
             }
-            else {
-                CountPage = CountRecords / 10;
+            if (OutputCB.SelectedIndex == 1)
+            {
+                currentRecordsOnPage = 50;
+                if (CountRecords % currentRecordsOnPage > 0)
+                {
+                    CountPage = CountRecords / currentRecordsOnPage + 1;
+                }
+                else
+                {
+                    CountPage = CountRecords / currentRecordsOnPage;
+                }
+            }
+            if (OutputCB.SelectedIndex == 2)
+            {
+                currentRecordsOnPage = 200;
+                if (CountRecords % currentRecordsOnPage > 0)
+                {
+                    CountPage = CountRecords / currentRecordsOnPage + 1;
+                }
+                else
+                {
+                    CountPage = CountRecords / currentRecordsOnPage;
+                }
+            }
+            if (OutputCB.SelectedIndex == 3)
+            {
+                currentRecordsOnPage = АлексеевLanguageEntities.GetContext().Client.Select(p => p.ID).Count();
+                CountPage = 1;
             }
 
             Boolean Ifupdate = true;
@@ -203,7 +240,7 @@ namespace AlekseevLanguage
 
         private void OutputCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            UpdateClient();
         }
     }
 }
