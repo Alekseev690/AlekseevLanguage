@@ -87,7 +87,7 @@ namespace AlekseevLanguage
             }
             if (SortCB.SelectedIndex == 2)
             {
-                currentClient = currentClient.OrderBy(p => p.LastDate).ToList();
+                currentClient = currentClient.OrderBy(p => p.LastServiceDate ?? DateTime.MinValue).ToList();
             }
             if (SortCB.SelectedIndex == 3)
             {

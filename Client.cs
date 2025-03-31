@@ -75,15 +75,12 @@ namespace AlekseevLanguage
         {
             get
             {
-                // Проверяем, что Birthday не null и имеет значение
                 if (Birthday.HasValue)
                 {
-                    // Возвращаем дату в формате короткой строки
                     return Birthday.Value.ToShortDateString();
                 }
                 else
                 {
-                    // Если Birthday равен null, возвращаем пустую строку
                     return "";
                 }
             }
@@ -93,18 +90,17 @@ namespace AlekseevLanguage
         {
             get
             {
-                // Получаем последнюю дату из связанных записей ClientService
-                var lastService = this.ClientService.OrderByDescending(p => p.StartTime).FirstOrDefault(); // Берем первую запись (самую позднюю)
+                var lastService = this.ClientService.OrderByDescending(p => p.StartTime).FirstOrDefault();
 
-                // Если запись найдена, возвращаем её дату, иначе возвращаем минимальную дату
                 return lastService != null ? lastService.StartTime.ToShortDateString() : "нет";
             }
         }
-        public DateTime StartDateTime
+        public DateTime? LastServiceDate
         {
             get
             {
-                return ClientService.Where(p => p.ClientID == ID).Select(p => p.StartTime).FirstOrDefault();
+                var lastService = this.ClientService.OrderByDescending(p => p.StartTime).FirstOrDefault();
+                return lastService?.StartTime;
             }
         }
     }
