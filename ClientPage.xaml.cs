@@ -87,14 +87,14 @@ namespace AlekseevLanguage
             }
             if (SortCB.SelectedIndex == 2)
             {
-                currentClient = currentClient.OrderBy(p => p.LastServiceDate ?? DateTime.MinValue).ToList();
+                currentClient = currentClient.OrderByDescending(p => p.LastServiceDate ?? DateTime.MinValue).ToList();
             }
             if (SortCB.SelectedIndex == 3)
             {
-                currentClient = currentClient.OrderBy(p => p.VisitCount).ToList();
+                currentClient = currentClient.OrderByDescending(p => p.VisitCount).ToList();
             }
 
-            currentClient = currentClient.Where(p => (p.FirstName + p.LastName + p.Patronymic).ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
+            currentClient = currentClient.Where(p => (p.FirstName + p.LastName + p.Patronymic + p.Email + (p.Phone.Replace("(", "").Replace(")", "").Replace("-", "").Replace("+", ""))).ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
 
             ClientListView.ItemsSource = currentClient;
             TableList = currentClient;
@@ -135,7 +135,7 @@ namespace AlekseevLanguage
             }
 
             Boolean Ifupdate = true;
-            int min;
+            int min, max = Math.Max(CurrentPage * currentRecordsOnPage + currentRecordsOnPage, CountRecords);
 
             if (selectedPage.HasValue)
             {
@@ -202,16 +202,15 @@ namespace AlekseevLanguage
                 }
                 PageListBox.SelectedIndex = CurrentPage;
 
-                min = CurrentPage * currentRecordsOnPage + currentRecordsOnPage < CountRecords
-                    ? CurrentPage * currentRecordsOnPage + currentRecordsOnPage
-                    : CountRecords;
-                TBCount.Text = min.ToString();
-                TBAllRecords.Text = " из " + CountRecords.ToString();
+                TBCount.Text = CountRecords.ToString();
+                TBAllRecords.Text = " из " + TotalClientCount.ToString();
 
                 ClientListView.ItemsSource = CurrentPageList;
                 ClientListView.Items.Refresh();
             }
         }
+
+        private int TotalClientCount = АлексеевLanguageEntities.GetContext().Client.Count();
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
