@@ -246,5 +246,15 @@ namespace AlekseevLanguage
         {
             UpdateClient();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage(null));
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Client));
+        }
     }
 }

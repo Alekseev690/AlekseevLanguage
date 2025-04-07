@@ -40,6 +40,8 @@
                     <TextBlock>По количеству посещений</TextBlock>
                 </ComboBox>
             </StackPanel>
+
+            <Button Content="Добавить клиента" Click="Button_Click"></Button>
         </WrapPanel>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -122,9 +124,8 @@
                             <TextBlock Text="{Binding VisitCount, StringFormat=Количество посещений: {0}}"></TextBlock>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Button Name="DeleteButton" Content="удалить" Click="DeleteButton_Click"></Button>
-                        </StackPanel>
+                        <Button Name="DeleteButton" Content="удалить" Click="DeleteButton_Click" Grid.Column="2" Grid.Row="1"></Button>
+                        <Button Name="AddButton" Content="редактировать" Click="AddButton_Click" Grid.Column="2" Grid.Row="2"></Button>
 
                     </Grid>
                 </DataTemplate>
