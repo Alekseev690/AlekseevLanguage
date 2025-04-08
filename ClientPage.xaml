@@ -18,13 +18,13 @@
 
         <WrapPanel Orientation="Horizontal">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Поиск:" FontSize="16"></TextBlock>
+                <TextBlock Text="Поиск:" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
                 <TextBox Name="TBoxSearch" TextChanged="TBoxSearch_TextChanged" Width="250" FontSize="15" Height="20"></TextBox>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="   Пол:" FontSize="16"></TextBlock>
-                <ComboBox Name="GenderCB" SelectionChanged="GenderCB_SelectionChanged" FontSize="16" Width="100">
+                <TextBlock Text="   Пол:" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                <ComboBox Name="GenderCB" SelectionChanged="GenderCB_SelectionChanged" FontSize="16" Width="100" Height="25">
                     <TextBlock>Все</TextBlock>
                     <TextBlock>Мусжкой</TextBlock>
                     <TextBlock>Женский</TextBlock>
@@ -32,8 +32,8 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="   Соритровка:" FontSize="16"></TextBlock>
-                <ComboBox Name="SortCB" SelectionChanged="SortCB_SelectionChanged" FontSize="16" Width="200">
+                <TextBlock Text="   Соритровка:" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                <ComboBox Name="SortCB" SelectionChanged="SortCB_SelectionChanged" FontSize="16" Width="200" Height="25">
                     <TextBlock>Нет</TextBlock>
                     <TextBlock>По фамилии от А до Я</TextBlock>
                     <TextBlock>По дате последнего посещения</TextBlock>
@@ -84,7 +84,7 @@
 
                         <Image Width="128" Grid.Column="0" Stretch="UniformToFill" HorizontalAlignment="Center" Grid.RowSpan="5">
                             <Image.Source>
-                                <Binding Path="PhotoPath">
+                                <Binding Path="NewPhotoPath">
                                     <Binding.TargetNullValue>
                                         res/school_logo.png
                                     </Binding.TargetNullValue>

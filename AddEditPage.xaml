@@ -58,11 +58,9 @@
         <TextBlock Text="Фото" HorizontalAlignment="Center" Margin="5" FontSize="16" Grid.Row="0" Grid.Column="2"/>
         <Image Name="PhotoClient" Height="200" Width="200" Margin="5" Grid.Row="1" Grid.RowSpan="3" Grid.Column="2">
             <Image.Source>
-                <Binding Path="PhotoPath">
+                <Binding Path="DataContext.NewPhotoPath" RelativeSource="{RelativeSource AncestorType=Page}">
                     <Binding.TargetNullValue>
-                        <ImageSource>
-                            res/school_logo.png
-                        </ImageSource>
+                        <ImageSource>res/school_logo.png</ImageSource>
                     </Binding.TargetNullValue>
                 </Binding>
             </Image.Source>

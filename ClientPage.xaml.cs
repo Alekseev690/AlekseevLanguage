@@ -68,7 +68,7 @@ namespace AlekseevLanguage
         {
             ChangePage(2, null);
         }
-
+        public int TotalClientCount = АлексеевLanguageEntities.GetContext().Client.Count();
         public void UpdateClient()
         {
             var currentClient = АлексеевLanguageEntities.GetContext().Client.ToList();
@@ -264,6 +264,5 @@ namespace AlekseevLanguage
                 UpdateClient();
             }
         }
-        private int TotalClientCount = АлексеевLanguageEntities.GetContext().Client.Count();
     }
 }

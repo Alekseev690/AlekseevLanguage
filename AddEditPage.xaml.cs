@@ -34,7 +34,6 @@ namespace AlekseevLanguage
                 RegistrationDP.Text = selectedClient.RegistrationDate.ToShortDateString();
                 RegistrationDP.IsEnabled = true;
             }
-            DataContext = currentClient;
 
             if (currentClient.GenderCode == "2")
             {
@@ -42,7 +41,10 @@ namespace AlekseevLanguage
             }
             else
             {
-                MaleRB.IsChecked = true;
+                if (currentClient.GenderCode == "1")
+                {
+                    MaleRB.IsChecked = true;
+                }
             }
 
             if (currentClient.ID == 0)
@@ -55,37 +57,45 @@ namespace AlekseevLanguage
 
             ClientBirthday = currentClient.Birthday;
             BirthdayDPicker.Text = ClientBirthday.ToString();
+            DataContext = currentClient;
+        }
+
+        public static string GetRelativePath(string basePath, string absolutePath)
+        {
+            Uri baseUri = new Uri(basePath);
+            Uri absoluteUri = new Uri(absolutePath);
+            Uri relativeUri = baseUri.MakeRelativeUri(absoluteUri);
+            return relativeUri.ToString();
         }
 
         private void PhotoChange_Click(object sender, RoutedEventArgs e)
         {
-            string clientsFolderPath = @"C:\Users\УАТ\source\repos\Alekseev690\AlekseevLanguage\Клиенты\";
+            string projectRootPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+            string clientsFolderPath = System.IO.Path.Combine(projectRootPath, "Клиенты");
 
             OpenFileDialog myOpenFileDialog = new OpenFileDialog
             {
-                InitialDirectory = clientsFolderPath,
                 Filter = "Image files (*.jpg; *.jpeg; *.png)|*.jpg;*.jpeg;*.png",
-                Title = "Выберите изображение клиента"
+                Title = "Выберите изображение клиента",
+                InitialDirectory = clientsFolderPath
             };
 
             if (myOpenFileDialog.ShowDialog() == true)
             {
-                currentClient.PhotoPath = myOpenFileDialog.FileName;
-
-                try
-                {
-                    BitmapImage bitmapImage = new BitmapImage();
-                    bitmapImage.BeginInit();
-                    bitmapImage.UriSource = new Uri(currentClient.PhotoPath, UriKind.Absolute);
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.EndInit();
-                    PhotoClient.Source = bitmapImage;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка при загрузке изображения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                string fileName = System.IO.Path.GetFileName(myOpenFileDialog.FileName);
+                currentClient.PhotoPath = $"Клиенты/{fileName}";
+                PhotoClient.Source = new BitmapImage(new Uri(myOpenFileDialog.FileName));
             }
+        }
+        private bool IsValidEmail()
+        {
+            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}$";
+            return Regex.IsMatch(currentClient.Email, pattern);
+        }
+        private bool IsValidName(string name)
+        {
+            string pattern = @"^[А-Яа-яЁё\s\-]+$";
+            return Regex.IsMatch(name, pattern);
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -94,55 +104,72 @@ namespace AlekseevLanguage
 
             if (string.IsNullOrWhiteSpace(currentClient.LastName))
                 errors.AppendLine("Укажите фамилию клиента!");
-
-            if (currentClient.LastName.Count() > 50)
-                errors.AppendLine("Слишком много симовлов фамилии!");
+            else
+            {
+                if (currentClient.LastName.Length > 50)
+                    errors.AppendLine("В поле «Фамилия» должено быть меньше 50 символов!");
+                if (!IsValidName(currentClient.LastName))
+                    errors.AppendLine("В поле «Фамилия» указаны некорректные входные данные!");
+            }
 
             if (string.IsNullOrWhiteSpace(currentClient.FirstName))
-                errors.AppendLine("Укажите имя клиента!");
-
-            if (currentClient.FirstName.Count() > 50)
-                errors.AppendLine("Слишком много символов в имени!");
+                errors.AppendLine("Укажите имя клиента");
+            else
+            {
+                if (currentClient.FirstName.Length > 50)
+                    errors.AppendLine("В поле «Имя» должено быть меньше 50 символов");
+                if (!IsValidName(currentClient.FirstName))
+                    errors.AppendLine("В поле «Имя» указаны некорректные входные данные!");
+            }
 
             if (string.IsNullOrWhiteSpace(currentClient.Patronymic))
-                errors.AppendLine("Укажите отчество клиента!");
-
-            if (currentClient.Patronymic.Count() > 50)
-                errors.AppendLine("Слишком много символов отчества!");
+                errors.AppendLine("Укажите отчество клиента");
+            else
+            {
+                if (currentClient.Patronymic.Length > 50)
+                    errors.AppendLine("В поле «Отчество» должено быть не более 50 символов");
+                if (!IsValidName(currentClient.Patronymic))
+                    errors.AppendLine("В поле «Отчество» указаны некорректные входные данные!");
+            }
 
             if (ClientBirthday == null)
-                errors.AppendLine("Укажите дату рождения клиента");
+                errors.AppendLine("Укажите дату рождения клиента!");
             else
             {
                 if (ClientBirthday > DateTime.Today)
-                    errors.AppendLine("Дата рождения клиента указана неверно");
+                    errors.AppendLine("Дата рождения указана неверно!");
             }
 
             if (string.IsNullOrWhiteSpace(currentClient.Email))
+                errors.AppendLine("Укажите почту клиента!");
+            else
             {
-                errors.AppendLine("Укажите email клиента!");
+                if (!IsValidEmail())
+                    errors.AppendLine("Укажите корректную почту!");
+            }
+
+            if (FemaleRB.IsChecked != true && MaleRB.IsChecked != true)
+            {
+                errors.AppendLine("Укажите пол клиента!");
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(currentClient.Email) || !currentClient.Email.Contains("@") || currentClient.Email.IndexOf("@") >= currentClient.Email.LastIndexOf(".") - 1 ||
-                    currentClient.Email.Split('@')[1].Length < 2 || currentClient.Email.Split('@')[1].Split('.')[0].Length < 2 ||
-                    currentClient.Email.Split('.').Last().Length < 2 || currentClient.Email.Any(c => !char.IsLetterOrDigit(c) && c != '@' && c != '.' && c != '_' && c != '-' && c != '(' && c != ')'))
-                {
-                    errors.AppendLine("Укажите корректный email клиента!");
-                }
+                currentClient.GenderCode = FemaleRB.IsChecked == true ? "2" : "1"; // жен - 2, муж - 1
             }
 
             if (string.IsNullOrWhiteSpace(currentClient.Phone))
             {
-                errors.AppendLine("Укажите номер телефона клиента!");
+                errors.AppendLine("Укажите номер телефона!");
             }
             else
             {
                 string phone = currentClient.Phone.Trim();
+                string allowedChars = "0123456789+-() ";
+                string ph = currentClient.Phone.Replace("(", "").Replace(")", "").Replace("-", "").Replace("+", "");
 
                 if (!phone.StartsWith("+7") && !phone.StartsWith("8"))
                 {
-                    errors.AppendLine("Телефон должен начинаться с +7 или 8!");
+                    errors.AppendLine("Телефон должен начинаться с +7 или 8 !");
                 }
 
                 string cleanedNumber = new string(phone.Where(char.IsDigit).ToArray());
@@ -157,16 +184,11 @@ namespace AlekseevLanguage
                     errors.AppendLine("Телефон не должен содержать букв!");
                 }
 
-                if (System.Text.RegularExpressions.Regex.IsMatch(currentClient.Phone, @"(\(\))|(--)|(\-\()|(\-\))|(\(\-)|(\)\-)|(\(\()|(\)\))"))
+                if ((ph[1] == '9' || ph[1] == '4' || ph[1] == '8') && ph.Length != 11 || (ph[1] == '3' && ph.Length != 12))
+                    errors.AppendLine("Укажите правильно телефон клиента!");
+                if (currentClient.Phone.Any(c => !allowedChars.Contains(c)))
                 {
-                    errors.AppendLine("Телефон содержит недопустимые последовательности символов!");
-                }
-
-                string ph = currentClient.Phone.Replace("(", "").Replace(")", "").Replace("-", "").Replace("+", "");
-                if ((ph.Length != 11 && (ph[0] == '9' || ph[0] == '4' || ph[0] == '8')) ||
-                    (ph.Length != 12 && ph[0] == '3'))
-                {
-                    errors.AppendLine("Укажите правильную длину телефонного номера клиента!");
+                    errors.AppendLine("В поле «Телефон» указан некорректный некоректно!");
                 }
             }
 
