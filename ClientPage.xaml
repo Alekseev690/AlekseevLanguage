@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:AlekseevLanguage"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ClientPage">
+      Title="ClientPage" IsVisibleChanged="Page_IsVisibleChanged">
 
     <Grid>
         <Grid.RowDefinitions>

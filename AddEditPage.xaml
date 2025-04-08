@@ -53,6 +53,8 @@
             <RadioButton Name="FemaleRB" Content="Женский" FontSize="16"></RadioButton>
         </StackPanel>
 
+        <TextBlock Name="RegistrationDP" Grid.Row="7" Grid.Column="2" IsEnabled="False" Height="0" Width="0"></TextBlock>
+
         <TextBlock Text="Фото" HorizontalAlignment="Center" Margin="5" FontSize="16" Grid.Row="0" Grid.Column="2"/>
         <Image Name="PhotoClient" Height="200" Width="200" Margin="5" Grid.Row="1" Grid.RowSpan="3" Grid.Column="2">
             <Image.Source>

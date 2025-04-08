@@ -31,6 +31,8 @@ namespace AlekseevLanguage
             InitializeComponent();
             if (selectedClient != null) {
                 currentClient = selectedClient;
+                RegistrationDP.Text = selectedClient.RegistrationDate.ToShortDateString();
+                RegistrationDP.IsEnabled = true;
             }
             DataContext = currentClient;
 
@@ -45,6 +47,8 @@ namespace AlekseevLanguage
 
             if (currentClient.ID == 0)
             {
+                RegistrationDP.Text = DateTime.Now.ToShortDateString();
+                RegistrationDP.IsEnabled = true;
                 IDTB.Visibility = Visibility.Hidden;
                 currentClient.Birthday = DateTime.Now;
             }
@@ -55,11 +59,32 @@ namespace AlekseevLanguage
 
         private void PhotoChange_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog myOpenFileDialog = new OpenFileDialog();
+            string clientsFolderPath = @"C:\Users\УАТ\source\repos\Alekseev690\AlekseevLanguage\Клиенты\";
+
+            OpenFileDialog myOpenFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = clientsFolderPath,
+                Filter = "Image files (*.jpg; *.jpeg; *.png)|*.jpg;*.jpeg;*.png",
+                Title = "Выберите изображение клиента"
+            };
+
             if (myOpenFileDialog.ShowDialog() == true)
             {
                 currentClient.PhotoPath = myOpenFileDialog.FileName;
-                PhotoClient.Source = new BitmapImage(new Uri(myOpenFileDialog.FileName));
+
+                try
+                {
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.UriSource = new Uri(currentClient.PhotoPath, UriKind.Absolute);
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.EndInit();
+                    PhotoClient.Source = bitmapImage;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке изображения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
@@ -100,8 +125,8 @@ namespace AlekseevLanguage
             else
             {
                 if (string.IsNullOrWhiteSpace(currentClient.Email) || !currentClient.Email.Contains("@") || currentClient.Email.IndexOf("@") >= currentClient.Email.LastIndexOf(".") - 1 ||
-                    currentClient.Email.Split('.').Last().Length < 2 || 
-                    currentClient.Email.Any(c => !char.IsLetterOrDigit(c) && c != '@' && c != '.' && c != '_' && c != '-'))
+                    currentClient.Email.Split('@')[1].Length < 2 || currentClient.Email.Split('@')[1].Split('.')[0].Length < 2 ||
+                    currentClient.Email.Split('.').Last().Length < 2 || currentClient.Email.Any(c => !char.IsLetterOrDigit(c) && c != '@' && c != '.' && c != '_' && c != '-' && c != '(' && c != ')'))
                 {
                     errors.AppendLine("Укажите корректный email клиента!");
                 }
@@ -114,10 +139,10 @@ namespace AlekseevLanguage
             else
             {
                 string phone = currentClient.Phone.Trim();
-                if (!phone.StartsWith("+7") && !phone.StartsWith("7") && !phone.StartsWith("8"))
+
+                if (!phone.StartsWith("+7") && !phone.StartsWith("8"))
                 {
-                    errors.AppendLine("Телефон должен начинаться с +7, 7 или 8!");
-                    return;
+                    errors.AppendLine("Телефон должен начинаться с +7 или 8!");
                 }
 
                 string cleanedNumber = new string(phone.Where(char.IsDigit).ToArray());
@@ -127,9 +152,22 @@ namespace AlekseevLanguage
                     errors.AppendLine("Телефон должен содержать не менее 10 цифр!");
                 }
 
+                if (currentClient.Phone.Any(char.IsLetter))
+                {
+                    errors.AppendLine("Телефон не должен содержать букв!");
+                }
+
+                if (System.Text.RegularExpressions.Regex.IsMatch(currentClient.Phone, @"(\(\))|(--)|(\-\()|(\-\))|(\(\-)|(\)\-)|(\(\()|(\)\))"))
+                {
+                    errors.AppendLine("Телефон содержит недопустимые последовательности символов!");
+                }
+
                 string ph = currentClient.Phone.Replace("(", "").Replace(")", "").Replace("-", "").Replace("+", "");
-                if ((ph[1] == '9' || ph[1] == '4' || ph[1] == '8') && ph.Length != 11 || (ph[1] == '3' && ph.Length != 12))
-                    errors.AppendLine("Укажите правильно телефон клиента!");
+                if ((ph.Length != 11 && (ph[0] == '9' || ph[0] == '4' || ph[0] == '8')) ||
+                    (ph.Length != 12 && ph[0] == '3'))
+                {
+                    errors.AppendLine("Укажите правильную длину телефонного номера клиента!");
+                }
             }
 
             if (FemaleRB.IsChecked == true)
@@ -151,6 +189,7 @@ namespace AlekseevLanguage
 
             if (currentClient.ID == 0)
             {
+                currentClient.RegistrationDate = DateTime.Now;
                 АлексеевLanguageEntities.GetContext().Client.Add(currentClient);
             }
             try
@@ -158,7 +197,6 @@ namespace AlekseevLanguage
                 АлексеевLanguageEntities.GetContext().SaveChanges();
                 MessageBox.Show("Информация сохранена!");
                 Manager.MainFrame.GoBack();
-
             }
             catch (Exception ex)
             {

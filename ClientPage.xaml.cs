@@ -210,8 +210,6 @@ namespace AlekseevLanguage
             }
         }
 
-        private int TotalClientCount = АлексеевLanguageEntities.GetContext().Client.Count();
-
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             var currentDataClient = (sender as Button).DataContext as Client;
@@ -256,5 +254,16 @@ namespace AlekseevLanguage
         {
             Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Client));
         }
+        
+        private void Page_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Visibility == Visibility.Visible)
+            {
+                АлексеевLanguageEntities.GetContext().ChangeTracker.Entries().ToList().ForEach(p => p.Reload());
+                ClientListView.ItemsSource = АлексеевLanguageEntities.GetContext().Client.ToList();
+                UpdateClient();
+            }
+        }
+        private int TotalClientCount = АлексеевLanguageEntities.GetContext().Client.Count();
     }
 }
