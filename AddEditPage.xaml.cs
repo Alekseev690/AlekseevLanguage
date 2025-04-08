@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -47,6 +48,9 @@ namespace AlekseevLanguage
                 IDTB.Visibility = Visibility.Hidden;
                 currentClient.Birthday = DateTime.Now;
             }
+
+            ClientBirthday = currentClient.Birthday;
+            BirthdayDPicker.Text = ClientBirthday.ToString();
         }
 
         private void PhotoChange_Click(object sender, RoutedEventArgs e)
@@ -55,7 +59,7 @@ namespace AlekseevLanguage
             if (myOpenFileDialog.ShowDialog() == true)
             {
                 currentClient.PhotoPath = myOpenFileDialog.FileName;
-                PhotoPeople.Source = new BitmapImage(new Uri(myOpenFileDialog.FileName));
+                PhotoClient.Source = new BitmapImage(new Uri(myOpenFileDialog.FileName));
             }
         }
 
@@ -83,10 +87,10 @@ namespace AlekseevLanguage
 
             if (ClientBirthday == null)
                 errors.AppendLine("Укажите дату рождения клиента");
-
-            if (currentClient.RegistrationDate != null)
+            else
             {
-                currentClient.RegistrationDate = DateTime.Now;
+                if (ClientBirthday > DateTime.Today)
+                    errors.AppendLine("Дата рождения клиента указана неверно");
             }
 
             if (string.IsNullOrWhiteSpace(currentClient.Email))
@@ -128,7 +132,6 @@ namespace AlekseevLanguage
                     errors.AppendLine("Укажите правильно телефон клиента!");
             }
 
-            currentClient.Birthday = Convert.ToDateTime(BirthdayDPicker.Text);
             if (FemaleRB.IsChecked == true)
             {
                 currentClient.GenderCode = "2"; // жен
@@ -137,6 +140,7 @@ namespace AlekseevLanguage
             {
                 currentClient.GenderCode = "1"; // муж
             }
+            currentClient.Birthday = ClientBirthday;
 
 
             if (errors.Length > 0)

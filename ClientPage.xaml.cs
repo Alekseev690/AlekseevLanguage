@@ -69,7 +69,7 @@ namespace AlekseevLanguage
             ChangePage(2, null);
         }
 
-        private void UpdateClient()
+        public void UpdateClient()
         {
             var currentClient = АлексеевLanguageEntities.GetContext().Client.ToList();
 
