@@ -201,7 +201,7 @@ namespace AlekseevLanguage
                     PageListBox.Items.Add(i);
                 }
                 PageListBox.SelectedIndex = CurrentPage;
-
+                CountRecords = TableList.Count;
                 TBCount.Text = CountRecords.ToString();
                 TBAllRecords.Text = " из " + TotalClientCount.ToString();
 

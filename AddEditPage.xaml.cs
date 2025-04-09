@@ -52,6 +52,7 @@ namespace AlekseevLanguage
                 RegistrationDP.Text = DateTime.Now.ToShortDateString();
                 RegistrationDP.IsEnabled = true;
                 IDTB.Visibility = Visibility.Hidden;
+                IDTBlock.Visibility = Visibility.Hidden;
                 currentClient.Birthday = DateTime.Now;
             }
 
@@ -59,15 +60,6 @@ namespace AlekseevLanguage
             BirthdayDPicker.Text = ClientBirthday.ToString();
             DataContext = currentClient;
         }
-
-        public static string GetRelativePath(string basePath, string absolutePath)
-        {
-            Uri baseUri = new Uri(basePath);
-            Uri absoluteUri = new Uri(absolutePath);
-            Uri relativeUri = baseUri.MakeRelativeUri(absoluteUri);
-            return relativeUri.ToString();
-        }
-
         private void PhotoChange_Click(object sender, RoutedEventArgs e)
         {
             string projectRootPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
@@ -164,7 +156,6 @@ namespace AlekseevLanguage
             else
             {
                 string phone = currentClient.Phone.Trim();
-                string allowedChars = "0123456789+-() ";
                 string ph = currentClient.Phone.Replace("(", "").Replace(")", "").Replace("-", "").Replace("+", "");
 
                 if (!phone.StartsWith("+7") && !phone.StartsWith("8"))
@@ -183,13 +174,13 @@ namespace AlekseevLanguage
                 {
                     errors.AppendLine("Телефон не должен содержать букв!");
                 }
+                if (System.Text.RegularExpressions.Regex.IsMatch(currentClient.Phone, @"(\(\))|(--)|(\-\()|(\-\))|(\(\-)|(\)\-)|(\(\()|(\)\))"))
+                {
+                    errors.AppendLine("Телефон содержит недопустимые последовательности символов!");
+                }
 
                 if ((ph[1] == '9' || ph[1] == '4' || ph[1] == '8') && ph.Length != 11 || (ph[1] == '3' && ph.Length != 12))
                     errors.AppendLine("Укажите правильно телефон клиента!");
-                if (currentClient.Phone.Any(c => !allowedChars.Contains(c)))
-                {
-                    errors.AppendLine("В поле «Телефон» указан некорректный некоректно!");
-                }
             }
 
             if (FemaleRB.IsChecked == true)
